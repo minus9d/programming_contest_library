@@ -1,4 +1,7 @@
 // verify: aoj grl_1_b
+//         http://abc061.contest.atcoder.jp/tasks/abc061_d
+
+
 #pragma once
 #include "common.h"
 
@@ -13,9 +16,11 @@ class BellmanFord {
 
 public:
     T INF;
+    T NINF;
 
     BellmanFord(int V)
         : INF(std::numeric_limits<T>::max())
+        , NINF(std::numeric_limits<T>::min())
         , m_V(V) {
         m_es.clear();
     }
@@ -29,22 +34,43 @@ public:
         add_dir_edge(v2, v1, cost);
     }
 
-    // 頂点sから各頂点までの距離を計算してdに格納
+    // 頂点sから各頂点までの距離を計算してdに格納 負の閉路も検出する
     vector<T> shortest_path(int s)
     {
+        // INF: その頂点には到達できない
+        // NINF: 負の経路があり、sからの最短距離は-∞
+        // INF以外: sからの最短距離
         vector<T> d(m_V, INF);
-        
+        vector<char> has_negative_loop(m_V);
         d[s] = 0;
-        while (true) {
+        REP(try_num, m_V) {
             bool update = false;
             REP(i, SIZE(m_es)) {
                 edge e = m_es[i];
                 if (d[e.from] != INF && d[e.to] > d[e.from] + e.cost) {
                     d[e.to] = d[e.from] + e.cost;
                     update = true;
+
+                    // 無限ループ発見
+                    if (try_num == m_V - 1) {
+                        has_negative_loop[e.to] = 1;
+                    }
                 }
             }
             if (!update) break;
+        }
+
+        // cout << "dists:" << endl;
+        // for (auto e: d) cout << e << " ";
+        // cout << endl;
+        // cout << "negative loop:" << endl;
+        // for (auto e: has_negative_loop) cout << int(e) << " ";
+        // cout << endl;
+
+        // sからたどり着くまでにnegative loopが存在するような頂点に関して、
+        // その最短路をNINFに書き換える
+        REP(i, m_V) {
+            if (has_negative_loop[i]) d[i] = NINF;
         }
 
         return move(d);
@@ -104,5 +130,3 @@ private:
     int m_V;                   
     vector<edge> m_es;
 };
-
-
