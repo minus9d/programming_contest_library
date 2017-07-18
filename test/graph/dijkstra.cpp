@@ -3,7 +3,6 @@
 
 TEST_CASE("dijkstra", "[graph]") {
     Dijkstra<int> dij(5);
-
     dij.add_dir_edge(0, 1, 1);
     dij.add_dir_edge(1, 2, 2);
     dij.add_dir_edge(2, 3, 3);
@@ -19,4 +18,9 @@ TEST_CASE("dijkstra", "[graph]") {
     REQUIRE(distances1[1] == 0);
     REQUIRE(distances1[2] == 2);
     REQUIRE(distances1[3] == 5);
+    auto path = dij.get_path(3);
+    REQUIRE(path.size() == 3);
+    REQUIRE(path[0] == 1);
+    REQUIRE(path[1] == 2);
+    REQUIRE(path[2] == 3);
 }
