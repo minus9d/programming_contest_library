@@ -7,11 +7,11 @@ vpath %.cpp test/data_structure
 vpath %.cpp test/graph
 vpath %.cpp test/number_theory
 
-CXX = g++
-CPPFLAGS = -Iinclude -Itest
-CXXFLAGS = -std=c++14
+CXX := g++
+CPPFLAGS := -Iinclude -Itest
+CXXFLAGS := -std=c++14
 
-SOURCES = \
+sources := \
 	bit.cpp \
 	bellman-ford.cpp \
 	dijkstra.cpp \
@@ -20,19 +20,26 @@ SOURCES = \
 	testmain.cpp
 
 # .cppを.oに置換
-OBJECTS = $(subst .cpp,.o,$(SOURCES))
+objects := $(subst .cpp,.o,$(sources))
 
 # 実行ファイルの生成ルール
-testmain: $(OBJECTS)
-	$(CXX) $^ -o $@
+# ここで、$(LINK.cc)の定義は、
+#   $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
+# に等しい。これはmake --print-data-baseで調べることができる
+# $^は、重複を除いたすべてのprerequisiteを指す
+testmain: $(objects)
+	$(LINK.cc) $^ -o $@
 
 # testmain.cpp以外のcppファイルのコンパイル用ルール
+# ここで、$(COMPILE.cc)の定義は、
+#   $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+# に等しい。
+# $< は、一番目に書かれたprerequisiteを指す
 %.o: %.cpp %.h common.h
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(COMPILE.cc) $< -o $@
 
 # testmain.cppのコンパイル用ルール
 # このルールを、この一つ上のルールより上に書いてしまうと、
 # このルールにたどりつけなくなってしまうので注意
 %.o: %.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
-
+	$(COMPILE.cc) $< -o $@
