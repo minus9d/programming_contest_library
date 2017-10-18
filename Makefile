@@ -28,7 +28,7 @@ OBJECTS     := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJE
 
 #Defauilt Make
 # all: resources $(TARGET)
-all: directories $(TARGET)
+all: directories $(TARGETDIR)/$(TARGET)
 
 #Remake
 remake: cleaner all
@@ -54,7 +54,7 @@ cleaner: clean
 -include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT))
 
 #Link
-$(TARGET): $(OBJECTS)
+$(TARGETDIR)/$(TARGET): $(OBJECTS)
 	$(CC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB)
 
 #Compile
