@@ -1,45 +1,71 @@
-vpath %.h include
-vpath %.h include/data_structure
-vpath %.h include/graph
-vpath %.h include/number_theory
-vpath %.cpp test
-vpath %.cpp test/data_structure
-vpath %.cpp test/graph
-vpath %.cpp test/number_theory
+# 参考：https://stackoverflow.com/questions/5178125/how-to-place-object-files-in-separate-subdirectory
 
-CXX := g++
-CPPFLAGS := -Iinclude -Itest
-CXXFLAGS := -std=c++14
+#Compiler and Linker
+CC          := g++
 
-sources := \
-	bit.cpp \
-	bellman-ford.cpp \
-	dijkstra.cpp \
-	warshall-floyd.cpp \
-	n_choose_k.cpp \
-	testmain.cpp
+#The Target Binary Program
+TARGET      := testmain
 
-# .cppを.oに置換
-objects := $(subst .cpp,.o,$(sources))
+#The Directories, Source, Includes, Objects, Binary and Resources
+SRCDIR      := test
+BUILDDIR    := obj
+TARGETDIR   := bin
+RESDIR      := res
+SRCEXT      := cpp
+DEPEXT      := d
+OBJEXT      := o
 
-# 実行ファイルの生成ルール
-# ここで、$(LINK.cc)の定義は、
-#   $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-# に等しい。これはmake --print-data-baseで調べることができる
-# $^は、重複を除いたすべてのprerequisiteを指す
-testmain: $(objects)
-	$(LINK.cc) $^ -o $@
+#Flags, Libraries and Includes
+CFLAGS      := -fopenmp -Wall -O3 -g -std=c++14
+LIB         := -fopenmp -lm 
+INC         := -Itest -Iinclude
 
-# testmain.cpp以外のcppファイルのコンパイル用ルール
-# ここで、$(COMPILE.cc)の定義は、
-#   $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
-# に等しい。
-# $< は、一番目に書かれたprerequisiteを指す
-%.o: %.cpp %.h common.h
-	$(COMPILE.cc) $< -o $@
+#---------------------------------------------------------------------------------
+#DO NOT EDIT BELOW THIS LINE
+#---------------------------------------------------------------------------------
+SOURCES     := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+OBJECTS     := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
 
-# testmain.cppのコンパイル用ルール
-# このルールを、この一つ上のルールより上に書いてしまうと、
-# このルールにたどりつけなくなってしまうので注意
-%.o: %.cpp
-	$(COMPILE.cc) $< -o $@
+#Defauilt Make
+# all: resources $(TARGET)
+all: directories $(TARGET)
+
+#Remake
+remake: cleaner all
+
+# #Copy Resources from Resources Directory to Target Directory
+# resources: directories
+# 	@cp $(RESDIR)/* $(TARGETDIR)/
+
+#Make the Directories
+directories:
+	@mkdir -p $(TARGETDIR)
+	@mkdir -p $(BUILDDIR)
+
+#Clean only Objecst
+clean:
+	@$(RM) -rf $(BUILDDIR)
+
+#Full Clean, Objects and Binaries
+cleaner: clean
+	@$(RM) -rf $(TARGETDIR)
+
+#Pull in dependency info for *existing* .o files
+-include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT))
+
+#Link
+$(TARGET): $(OBJECTS)
+	$(CC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB)
+
+#Compile
+$(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(INC) -MM $(SRCDIR)/$*.$(SRCEXT) > $(BUILDDIR)/$*.$(DEPEXT)
+	@cp -f $(BUILDDIR)/$*.$(DEPEXT) $(BUILDDIR)/$*.$(DEPEXT).tmp
+	@sed -e 's|.*:|$(BUILDDIR)/$*.$(OBJEXT):|' < $(BUILDDIR)/$*.$(DEPEXT).tmp > $(BUILDDIR)/$*.$(DEPEXT)
+	@sed -e 's/.*://' -e 's/\\$$//' < $(BUILDDIR)/$*.$(DEPEXT).tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(BUILDDIR)/$*.$(DEPEXT)
+	@rm -f $(BUILDDIR)/$*.$(DEPEXT).tmp
+
+#Non-File Targets
+.PHONY: all remake clean cleaner resources
