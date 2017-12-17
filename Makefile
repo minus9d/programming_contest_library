@@ -25,7 +25,12 @@ INC         := -Itest -Iinclude
 
 sources     := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 objects     := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(subst $(SRCEXT),$(OBJEXT),$(sources)))
-dependencies := $(subst $(OBJEXT),$(DEPEXT),$(objects))
+dependencies := $(subst .$(OBJEXT),.$(DEPEXT),$(objects))
+
+# # for debug
+# $(info $(sources))
+# $(info $(objects))
+# $(info $(dependencies))
 
 #Defauilt Make
 all: directories $(TARGETDIR)/$(TARGET)
