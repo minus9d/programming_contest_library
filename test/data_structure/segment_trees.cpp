@@ -3,8 +3,7 @@
 #include "data_structure/segment_tree_min.h"
 
 TEST_CASE("segment_tree_sum", "[data_structure]") {
-    SegmentTreeSum st;
-    st.init(8);
+    SegmentTreeSum<int> st(8);
     st.update(4, 7);
     st.update(1, 2);
     REQUIRE(st.query(0, 8) == 9);
@@ -14,8 +13,7 @@ TEST_CASE("segment_tree_sum", "[data_structure]") {
 }
 
 TEST_CASE("segment_tree_min", "[data_structure]") {
-    SegmentTreeMin st;
-    st.init(8);
+    SegmentTreeMin<int> st(8);
     st.update(0, 5);
     st.update(1, 2);
     st.update(2, 7);
