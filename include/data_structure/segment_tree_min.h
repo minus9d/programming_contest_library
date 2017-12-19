@@ -1,3 +1,4 @@
+// 参考：プログラミングコンテストチャレンジブック 第一版 p155
 #pragma once
 #include "common.h"
 
@@ -39,9 +40,9 @@ private:
     }
 };
 
-// (最小値, 最小値をとるインデックス)のペアを返す
+// <最小値, 最小値をとるインデックス>のペアを返す
 // 複数の値が同時に最小値を取る場合はどちらのインデックスが返るか保証がないので注意
-// 戻る値など要確認！！！
+// verify: http://agc005.contest.atcoder.jp/tasks/agc005_b
 template <typename T>
 class SegmentTreeMinWithIndex
 {

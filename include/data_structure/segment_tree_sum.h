@@ -1,3 +1,4 @@
+// 参考：プログラミングコンテストチャレンジブック 第一版 p155
 #pragma once
 #include "common.h"
 
