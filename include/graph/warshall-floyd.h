@@ -9,11 +9,9 @@ private:
     vector<vector<T>> m_d;
     
 public:
-    T INF;
-    
+    const T INF = std::numeric_limits<T>::max()/2; // ?
     WarshallFloyd(int V)
-        : INF(std::numeric_limits<T>::max()/2)
-        , m_V(V) {
+        : m_V(V) {
 
         // 辺のコストを初期化
         // 辺が存在しないときはINFとする

@@ -6,12 +6,11 @@ template <typename T>
 class SegmentTreeMin
 {
 private:
-    T INF;
     int m_n;
     vector<T> m_dat;
 public:
-    SegmentTreeMin(int n)
-        : INF(std::numeric_limits<T>::max()) {
+    const T INF = std::numeric_limits<T>::max();
+    SegmentTreeMin(int n) {
         m_n = 1;
         while  (m_n < n) m_n *= 2;
         m_dat.resize(2 * m_n - 1, INF);

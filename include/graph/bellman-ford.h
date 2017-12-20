@@ -15,13 +15,10 @@ class BellmanFord {
     };
 
 public:
-    T INF;
-    T NINF;
-
+    const T INF = std::numeric_limits<T>::max();
+    const T NINF = std::numeric_limits<T>::min();
     BellmanFord(int V)
-        : INF(std::numeric_limits<T>::max())
-        , NINF(std::numeric_limits<T>::min())
-        , m_V(V) {
+        : m_V(V) {
         m_es.clear();
     }
 

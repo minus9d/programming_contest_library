@@ -6,31 +6,30 @@
 template <typename T>
 class FordFulkerson {
 private:
-    struct edge { int to, T cap, T rev; }; // 行き先、容量、逆辺
-    とちゅう
-    const int INF = 1e9;
+    struct edge { int to; T cap; T rev; }; // 行き先、容量、逆辺
     vector<vector<edge>> G;
     vector<char> used;
 public:
+    const T INF = std::numeric_limits<T>::max();
     FordFulkerson(int V) {
         G.resize(V);
         used.resize(V);
     }
-    void add_uni_edge(int from, int to, int cap) {
+    void add_uni_edge(int from, int to, T cap) {
         // revには、逆辺の容量をすぐに得るためのインデックスを記録
         G[from].push_back( edge{ to, cap, SIZE(G[to])});
         G[to].push_back( edge{from, 0, SIZE(G[from]) - 1});
     }
     // 未テスト
-    void add_bi_edge(int v1, int v2, int cap) {
+    void add_bi_edge(int v1, int v2, T cap) {
         add_uni_edge(v1, v2, cap);
         add_uni_edge(v2, v1, cap);
     }
-    int max_flow(int s, int t) {
-        int flow = 0;
+    T max_flow(int s, int t) {
+        T flow = 0;
         while (true) {
             fill(ALL(used), 0);
-            int f = dfs(s, t, INF);
+            T f = dfs(s, t, INF);
             if (f == 0) return flow;
             flow += f;
         }
@@ -47,7 +46,7 @@ public:
 private:
     // vからtまでの最大流を返す
     // fは、頂点vの時点でわかっている可能な最大流の大きさ??
-    int dfs(int v, int t, int f) {
+    T dfs(int v, int t, T f) {
         if (v == t) return f;
         used[v] = true;
         // v番目の頂点が持つ辺でループ
@@ -55,7 +54,7 @@ private:
             edge &e = G[v][i];
             // まだ辺eに余裕がある場合
             if (!used[e.to] && e.cap > 0) {
-                int d = dfs(e.to, t, min(f, e.cap));
+                auto d = dfs(e.to, t, min(f, e.cap));
                 if (d > 0) {
                     e.cap -= d;
                     G[e.to][e.rev].cap += d;

@@ -12,13 +12,10 @@ private:
     int m_V;
     vector<vector<edge> > m_G;
 public:
-    T INF;
+    const T INF = std::numeric_limits<T>::max();
     vector<int> m_prev_path; // 最短パスを辿るため
 
-    Dijkstra(int V)
-        : INF(std::numeric_limits<T>::max())
-        , m_V(V)
-    {
+    Dijkstra(int V) : m_V(V) {
         m_G.resize(m_V);
     }
 
