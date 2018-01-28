@@ -51,6 +51,9 @@ clean:
 cleaner: clean
 	@$(RM) -rf $(TARGETDIR)
 
+run:
+	./$(TARGETDIR)/$(TARGET)
+
 #Pull in dependency info for *existing* .o files
 -include $(dependencies)
 
