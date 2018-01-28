@@ -1,5 +1,6 @@
 // 二部マッチングを2種類の方法で解く
-// 参考：プログラミングコンテストチャレンジブック 第一版 p196, p197
+// 参考: プログラミングコンテストチャレンジブック 第一版 p196, p197
+// verify: https://soundhound2018.contest.atcoder.jp/tasks/soundhound2018_c
 
 #pragma once
 #include "common.h"
@@ -10,6 +11,8 @@ public:
     // V1, V2: 左側・右側それぞれの頂点数
     BipartiteMatching(int V1, int V2) : m_V1(V1), m_V2(V2) {
         m_G.resize(m_V1 + m_V2);
+        m_match.resize(m_V1 + m_V2, -1);
+        m_used.resize(m_V1 + m_V2);
     }
     // 左側の頂点と右側の頂点の間に辺を張る
     void add_edge(int v1, int v2) {
@@ -20,10 +23,10 @@ public:
     // 二部グラフの最大マッチングを求める
     int bipartite_matching() {
         int res = 0;
-        m_match.resize(m_V1 + m_V2, -1);
+        fill(ALL(m_match), -1);
         REP(v, m_V1 + m_V2) {
             if (m_match[v] < 0) {
-                m_used.resize(m_V1 + m_V2, 0);
+                fill(ALL(m_used), 0);
                 if (dfs(v)) ++res;
             }
         }
@@ -37,7 +40,7 @@ public:
             else cout << "is matched with " << m << endl;
         }
     }
-    bool has_matching(int u, int v) { return m_match[u] == v; }
+    bool has_matching(int v1, int v2) { return m_match[v1] == m_V1 + v2; }
 private:
     bool dfs(int v) {
         m_used[v] = true;
