@@ -1,18 +1,13 @@
 #pragma once
 #include "common.h"
 
-class nCk {
+class NCK {
 private:
     ll m_mod;
-    ll m_precompChooseMax = -1;
-    ll m_precompModInverseMax = -1;
 
 public:
     // mod must be a prime number
-    nCk(ll mod) : m_mod(mod) {}
-
-    vector<vector<ll>> m_chooseResult;
-    vector<ll> m_modInverseResult;
+    NCK(ll mod) : m_mod(mod) {}
 
     // x^y % m_mod
     ll modPow(ll x, ll y)
@@ -31,8 +26,7 @@ public:
     // a^-1 ≡ a^(p-2) (mod p)   (p is prime)
     ll modInverse(ll x)
     {
-        if (x <= m_precompModInverseMax) return m_modInverseResult[x];
-        else return modPow(x, m_mod-2);
+        return modPow(x, m_mod-2);
     }
 
     // Modular division x / y, find modular multiplicative inverse of y
@@ -45,10 +39,6 @@ public:
     // Binomial coifficient C(n,k) in O(k) time.
     ll choose(ll n, ll k)
     {
-        if (max(n, k) <= m_precompChooseMax) {
-            return m_chooseResult[n][k];
-        }
-
         if (k > n) {
             return 0;
         }
@@ -60,28 +50,43 @@ public:
         return modDivision(p, q);
     }
 
-    // precompute nCk
-    void precompChoose(ll n_max) {
+    // make nCk table from 0C0 to nCn
+    vector<vector<ll>> makeNckTableFrom00ToNN(ll n_max) {
         assert(n_max > 0);
-        m_chooseResult.resize(n_max+1, vector<ll>(n_max+1));
-        m_chooseResult[0][0] = 1;
+        vector<vector<ll>> table(n_max+1, vector<ll>(n_max+1));
+        table[0][0] = 1;
         FOR(i, 1, n_max + 1) {
-            m_chooseResult[i][0] = 1;
+            table[i][0] = 1;
             FOR(j, 1, n_max + 1) {
-                m_chooseResult[i][j]
-                    = (m_chooseResult[i - 1][j - 1] + m_chooseResult[i - 1][j])
-                    % m_mod;
+                table[i][j] = (table[i - 1][j - 1] + table[i - 1][j]) % m_mod;
             }
         }
-        m_precompChooseMax = n_max;
+        return table;
     }
-    // precompute modInverse
-    void precompModInverse(ll n_max) {
-        assert(n_max > 0);
-        m_modInverseResult.resize(n_max + 1);
-        FOR(i, 1, n_max + 1) {
-            m_modInverseResult[i] = modInverse(i);
+
+    // make nCk table from nC0 to nCn
+    vector<ll> makeNckTableFromN0ToNN(ll n, ll k_max) {
+        assert(n > 0);
+        assert(n >= k_max);
+        vector<ll> table(n+1);
+        table[0] = 1;
+        ll p = 1, q = 1;
+        table[0] = 1;
+        FOR(i, 1, k_max+1) {
+            q = (q * i) % m_mod;
+            p = (p * (n - i + 1)) % m_mod;
+            table[i] = modDivision(p, q);
         }
-        m_precompModInverseMax = n_max;
+        return table;
+    }
+
+    // make modInverse table from 0 to n_max
+    vector<ll> makeModInverseTable(ll n_max) {
+        assert(n_max > 0);
+        vector<ll> table(n_max + 1);
+        FOR(i, 1, n_max + 1) {
+            table[i] = modInverse(i);
+        }
+        return table;
     }
 };
