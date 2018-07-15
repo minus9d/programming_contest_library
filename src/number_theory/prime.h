@@ -195,23 +195,17 @@ map<ll, int> getFactorsMap(ll N){
     return ret;
 }
 
-// original: http://stackoverflow.com/questions/4229870/c-algorithm-to-calculate-least-common-multiple-for-multiple-numbers
 // 2数の最大公約数
 ll getGcdSimple(ll a, ll b)
 {
-    while(1) {
-        if (a == 0) return b;
-        b %= a;
-        if (b == 0) return a;
-        a %= b;
-    }
+    if (b == 0) return a;
+    return getGCDSimple(b, a % b);
 }
 
 // 2数の最小公倍数
 ll getLcmSimple(ll a, ll b)
 {
-    ll temp = getGcdSimple(a, b);
-    return temp ? (a / temp * b) : 0;
+    return a / getGcdSimple(a, b) * b;
 }
 
 // 数のリストから最大公約数を求める
