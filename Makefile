@@ -7,7 +7,7 @@ CXX          := g++
 TARGET      := testmain
 
 #The Directories, Source, Includes, Objects, Binary and Resources
-SRCDIR      := test
+SRCDIR      := src
 BUILDDIR    := obj
 TARGETDIR   := bin
 SRCEXT      := cpp
@@ -17,7 +17,7 @@ OBJEXT      := o
 #Flags, Libraries and Includes
 CXXFLAGS    := -Wall -g -std=c++14
 LDFLAGS     :=
-INC         := -Itest -Iinclude
+INC         := -Isrc
 
 #---------------------------------------------------------------------------------
 #DO NOT EDIT BELOW THIS LINE
