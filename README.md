@@ -5,8 +5,6 @@ Programming Contest Library
 
 競技プログラミングのためのライブラリを集めたレポジトリです。
 
-ライブラリ本体はinclude, テストコードはtestに存在します。
+src以下にある.hファイルがライブラリ、.cppがそのテストコードです。
 
 テストフレームワークには[Catch2](https://github.com/catchorg/Catch2)を使用しています。`make`の後`./bin/testmain`とするとテストが走ります。
-
-
