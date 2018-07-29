@@ -39,6 +39,24 @@ private:
     }
 };
 
+// Not verified
+template <typename T>
+class SegmentTreeMax
+{
+private:
+    SegmentTreeMin<T> m_st;
+public:
+    SegmentTreeMax(int n) : m_st(n) {};
+    void update(int k, T val) {
+        m_st.update(k, -val);
+    }
+    // [a, b)の範囲で最大値を返す
+    T query(int a, int b) {
+        return -m_st.query(a, b);
+    }
+};
+
+
 // <最小値, 最小値をとるインデックス>のペアを返す
 // 複数の値が同時に最小値を取る場合はどちらのインデックスが返るか保証がないので注意
 // verify: http://agc005.contest.atcoder.jp/tasks/agc005_b
@@ -81,5 +99,26 @@ private:
             auto vr = queryInternal(a, b, k * 2 + 2, (l + r) / 2, r);
             return (vl.first < vr.first) ? vl : vr;
         }
+    }
+};
+
+// <最大値, 最大値をとるインデックス>のペアを返す
+// 複数の値が同時に最大値を取る場合はどちらのインデックスが返るか保証がないので注意
+// Not verified
+template <typename T>
+class SegmentTreeMaxWithIndex
+{
+private:
+    SegmentTreeMinWithIndex<T> m_st;
+public:
+    SegmentTreeMaxWithIndex(int n) : m_st(n) {}
+    void update(int k, T val) {
+        m_st.update(k, -val);
+    }
+    // [a, b)の範囲で(max, idx)のペアを返す
+    pair<T,int> query(int a, int b) {
+        auto ret = m_st.query(a, b);
+        ret.first *= -1;
+        return ret;
     }
 };
