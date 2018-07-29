@@ -199,7 +199,7 @@ map<ll, int> getFactorsMap(ll N){
 ll getGcdSimple(ll a, ll b)
 {
     if (b == 0) return a;
-    return getGCDSimple(b, a % b);
+    return getGcdSimple(b, a % b);
 }
 
 // 2数の最小公倍数
