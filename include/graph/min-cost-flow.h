@@ -3,19 +3,20 @@
 #pragma once
 #include "common.h"
 
+template <typename T>
 class MinCostFlowPotential {
 
 private:
-    struct edge { int to, cap, cost, rev; }; // 行き先、容量、コスト、逆辺
-    typedef pair<int, int> P;    // <最短距離, 頂点の番号>
+    struct edge { int to; T cap; T cost; T rev; }; // 行き先、容量、コスト、逆辺
+    typedef pair<T, int> P;    // <最短距離, 頂点の番号>
     int V;
-    vector<vector<edge> > G;
-    vector<int> h; // ポテンシャル
-    vector<int> dist;
+    vector<vector<edge>> G;
+    vector<T> h; // ポテンシャル
+    vector<T> dist;
     vector<int> prevv; // 直前の頂点
     vector<int> preve; // 直前の辺
 public:
-    const int INF = 1e8;
+    const T INF = std::numeric_limits<T>::max();
     void init(int v) {
         V = v;
         G.resize(V);
@@ -24,13 +25,13 @@ public:
         prevv.resize(V); // 直前の頂点
         preve.resize(V); // 直前の辺
     }
-    void add_edge(int from, int to, int cap, int cost) {
-        G[from].push_back( (edge){ to, cap, cost, SIZE(G[to]) } );
-        G[to].push_back( (edge){from, 0, -cost, SIZE(G[from]) - 1});
+    void add_edge(int from, int to, T cap, T cost) {
+        G[from].push_back( edge{to, cap, cost, SIZE(G[to])} );
+        G[to].push_back( edge{from, 0, -cost, SIZE(G[from]) - 1});
     }
     // sからtまでf流したときの最小コストを求める 流せない時は-1を返す
-    int min_cost_flow(int s, int t, int f) {
-        int res = 0;
+    T min_cost_flow(int s, int t, T f) {
+        T res = 0;
         fill(ALL(h), 0);
         while (f > 0) {
             // dijkstra
@@ -39,12 +40,12 @@ public:
             dist[s] = 0;
             que.push(P(0, s));
             while (!que.empty()) {
-                P p = que.top();
+                auto p = que.top();
                 que.pop();
-                int v = p.second;
+                auto v = p.second;
                 if (dist[v] < p.first) continue;
                 REP(i, SIZE(G[v])) {
-                    edge &e = G[v][i];
+                    auto &e = G[v][i];
                     if (e.cap > 0 && dist[e.to] > dist[v] + e.cost + h[v] - h[e.to]) {
                         dist[e.to] = dist[v] + e.cost + h[v] - h[e.to];
                         prevv[e.to] = v;
@@ -58,14 +59,14 @@ public:
             }
             REP(v, V) h[v] += dist[v];
 
-            int d = f;
-            for (int v = t; v != s; v = prevv[v]) {
+            auto d = f;
+            for (auto v = t; v != s; v = prevv[v]) {
                 d = min(d, G[prevv[v]][preve[v]].cap);
             }
             f -= d;
             res += d * h[t];
-            for (int v = t; v != s; v = prevv[v]) {
-                edge &e = G[prevv[v]][preve[v]];
+            for (auto v = t; v != s; v = prevv[v]) {
+                auto &e = G[prevv[v]][preve[v]];
                 e.cap -= d;
                 G[v][e.rev].cap += d;
             }

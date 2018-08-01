@@ -2,9 +2,9 @@
 #include "graph/min-cost-flow.h"
 
 TEST_CASE("min-cost-flow-potential", "[graph]") {
-    MinCostFlowPotential mcfp;
+    MinCostFlowPotential<int> mcfp;
     mcfp.init(5);
-    
+
     // p199の絵に従う
     // from, to, cap, costの順
     mcfp.add_edge(0, 1, 10, 2);
@@ -21,8 +21,8 @@ TEST_CASE("min-cost-flow-potential", "[graph]") {
 TEST_CASE("min-cost-flow-bellman-ford", "[graph]") {
     MinCostFlowBellmanFord mcf;
     mcf.init(5);
-    
-    // p199の絵に従う
+
+    // p199の絵に従う
     // from, to, cap, costの順
     mcf.add_edge(0, 1, 10, 2);
     mcf.add_edge(0, 2, 2, 4);
