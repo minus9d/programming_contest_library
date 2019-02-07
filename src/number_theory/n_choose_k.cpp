@@ -56,6 +56,17 @@ TEST_CASE("makeNckTableFromN0ToNN", "[number_theory]") {
     REQUIRE(table[7] == 1);
 }
 
+TEST_CASE("makeTableFromN1CkToN2Ck", "[number_theory]") {
+    NCK nck(1e9 + 7);
+    auto table = nck.makeTableFromN1CkToN2Ck(2, 7, 2);
+    REQUIRE(table[0] == 1);  // 2C2
+    REQUIRE(table[1] == 3);  // 3C2
+    REQUIRE(table[2] == 6);  // 4C2
+    REQUIRE(table[3] == 10);  // 5C2
+    REQUIRE(table[4] == 15);  // 6C2
+    REQUIRE(table[5] == 21);  // 7C2
+}
+
 TEST_CASE("makeModInverseTable", "[number_theory]") {
     NCK nck(7);
     auto table = nck.makeModInverseTable(7);

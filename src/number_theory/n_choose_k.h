@@ -80,6 +80,24 @@ public:
         return table;
     }
 
+    // make nCk table from n1Ck to n2Ck
+    vector<ll> makeTableFromN1CkToN2Ck(ll n1, ll n2, ll k) {
+        vector<ll> table;
+        ll tmp = -1;
+        FOR(n, n1, n2 + 1) {
+            if (n == n1) {
+                tmp = this->choose(n, k);
+            }
+            else {
+                tmp *= n;
+                tmp %= this->m_mod;
+                tmp = this->modDivision(tmp, n - k);
+            }
+            table.pb(tmp);
+        }
+        return table;
+    }
+
     // make modInverse table from 0 to n_max
     vector<ll> makeModInverseTable(ll n_max) {
         assert(n_max > 0);
