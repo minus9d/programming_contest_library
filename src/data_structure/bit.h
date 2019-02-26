@@ -19,6 +19,7 @@ public:
         m_bit.resize(n + 1);
     }
 
+    // 要素1から要素iまでの和
     int sum(int i) {
         int s = 0;
         while (i > 0) {
