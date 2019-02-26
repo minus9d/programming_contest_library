@@ -24,6 +24,8 @@ private:
     vector<T> m_cum;
 };
 
+
+
 // 2次元累積和。Integrarl Image(積分画像)ともいう
 template <typename T>
 class CumSum2D
