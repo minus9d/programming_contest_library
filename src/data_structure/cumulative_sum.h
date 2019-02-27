@@ -45,12 +45,6 @@ public:
                 REP(w, m_W) m_cum[h][w] += m_cum[h - 1][w];
             }
         }
-        REP(h, m_H) {
-            REP(w, m_W) {
-                 cout << m_cum[h][w] << " ";
-            }
-            cout << endl;
-        }
     }
     // 長方形の中の要素の合計を返す。長方形の左上は[x1, y1], 右下は[x2, y2]。両端を含む
     T getSum(int x1, int y1, int x2, int y2) {
