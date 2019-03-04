@@ -84,3 +84,10 @@
 * 上記言い換えにより二分探索が使えるようになる
   * 数列の要素がX以上なら+1, X未満なら-1などとできる
   * 例: [Median of Medians](https://atcoder.jp/contests/arc101/tasks/arc101_b)
+
+## 区間
+
+### ヒント
+
+* １次元座標中に始点・終点をもつ区間がたくさんある場合、始点をX軸、終点をY軸として区間を点としてプロット
+  * 例: [AtCoder Express 2](https://atcoder.jp/contests/abc106/tasks/abc106_d)
