@@ -5,7 +5,8 @@
 // e.g.
 //   aaabaaaab
 //   921034210
-// https://snuke.hatenablog.com/entry/2014/12/03/214243
+// reference: https://snuke.hatenablog.com/entry/2014/12/03/214243
+// verify: https://atcoder.jp/contests/abc141/tasks/abc141_e
 template <typename T>
 vector<int> z_algorithm(T& s) {
     auto len = SIZE(s);

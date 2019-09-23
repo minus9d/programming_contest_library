@@ -6,7 +6,8 @@
 // e.g.
 //   abaaababa
 //   121412321
-// https://snuke.hatenablog.com/entry/2014/12/02/235837
+// reference: https://snuke.hatenablog.com/entry/2014/12/02/235837
+// verify: None
 template <typename T>
 vector<int> manacher(T& s) {
     int i = 0;
