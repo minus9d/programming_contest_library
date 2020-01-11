@@ -144,23 +144,29 @@ set<ll> getDivisorsSet(ll n){
 // nの素因数を得る（回数はカウントしない）
 // n=12に対して2, 3を返す
 set<ll> getFactorsSet(ll n){
+    if (n == 0) return set<ll>{};
+
     set<ll> ret;
     while(!(n % 2)){
         n /= 2;
         ret.insert(2);
     }
-    for(ll i = 3; i * i <= n; i += 2){
+    ll orig_n = n;
+    for(ll i = 3; i * i <= orig_n; i += 2){
         while(!(n % i)){
             n /= i;
             ret.insert(i);
         }
     }
+    if (n != 1) ret.insert(n);
     return ret;
 }
 
 // nを素数の積で表す
 // e.g. n=12に対して2, 2, 3を返す
 vector<ll> getFactorsVector(ll n){
+    if (n == 0) return vector<ll>{};
+
     vector<ll> ret;
     while(!(n % 2)){
         n /= 2;

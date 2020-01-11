@@ -15,7 +15,7 @@ DEPEXT      := d
 OBJEXT      := o
 
 #Flags, Libraries and Includes
-CXXFLAGS    := -Wall -g -std=c++14
+CXXFLAGS    := -O2 -W -Wall -g -std=c++14
 LDFLAGS     :=
 INC         := -Isrc
 
