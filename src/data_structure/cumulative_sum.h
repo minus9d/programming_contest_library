@@ -14,7 +14,7 @@ public:
         FOR(i, 1, m_N) m_cum[i] += m_cum[i - 1];
     }
     // get sum of [l, r]. 0-based.
-    T getSum(int l, int r) {
+    T getSum(int l, int r) const {
         T ret = m_cum[r];
         if (l != 0) ret -= m_cum[l - 1];
         return ret;
