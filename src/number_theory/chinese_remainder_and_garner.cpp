@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "number_theory/chinese_remainder.h"
+#include "number_theory/chinese_remainder_and_garner.h"
 
 TEST_CASE("chinseRemSimple", "[number_theory]") {
     // 3で割って2余り、5で割って3余る数は、15で割って8余る数
@@ -18,4 +18,7 @@ TEST_CASE("chinseRem", "[number_theory]") {
 }
 
 TEST_CASE("garner", "[number_theory]") {
+    // 3で割って2余り、5で割って3余り、7で割って2余る数 のうち、
+    // 最小の0以上の整数 (= 23) を、11で割った余り
+    REQUIRE(garner(vector<ll>{2, 3, 2}, vector<ll>{3, 5, 7}, 11) == 1);
 }

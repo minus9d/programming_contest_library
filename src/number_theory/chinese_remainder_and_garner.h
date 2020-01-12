@@ -52,23 +52,34 @@ pair<ll, ll> chineseRem(const vector<ll> &b, const vector<ll> &m) {
     return make_pair(mod(r, M), M);
 }
 
+// 逆元計算 (ここでは a と m が互いに素であることが必要)
+ll modinv(ll a, ll m) {
+    ll x, y;
+    extGcd(a, m, x, y);
+    return mod(x, m); // 気持ち的には x % m だが、x が負かもしれないので
+}
+
 // Garner のアルゴリズム
+//
 // x ≡ b1 (mod. m1), x ≡ b2 (mod. m2), ..., x ≡ bK (mod. mK) を満たす
 // 最小の 0 以上の整数 x を求める
 // そして、x mod MOD の値を出力する
+//
+// m1, m2, ..., mKは互いに素でなければならない
+//
 // for each step, we solve "coeffs[k] * t[k] + constants[k] = b[k] (mod. m[k])"
 //      coeffs[k] = m[0]m[1]...m[k-1]
 //      constants[k] = t[0] + t[1]m[0] + ... + t[k-1]m[0]m[1]...m[k-2]
-/* ll garner(vector<ll> b, vector<ll> m, ll MOD) { */
-/*     m.push_back(MOD); // banpei */
-/*     vector<ll> coeffs((int)m.size(), 1); */
-/*     vector<ll> constants((int)m.size(), 0); */
-/*     for (int k = 0; k < (int)b.size(); ++k) { */
-/*         ll t = mod((b[k] - constants[k]) * modinv(coeffs[k], m[k]), m[k]); */
-/*         for (int i = k+1; i < (int)m.size(); ++i) { */
-/*             (constants[i] += t * coeffs[i]) %= m[i]; */
-/*             (coeffs[i] *= m[k]) %= m[i]; */
-/*         } */
-/*     } */
-/*     return constants.back(); */
-/* } */
+ll garner(vector<ll> b, vector<ll> m, ll MOD) {
+    m.push_back(MOD); // banpei
+    vector<ll> coeffs((int)m.size(), 1);
+    vector<ll> constants((int)m.size(), 0);
+    for (int k = 0; k < (int)b.size(); ++k) {
+        ll t = mod((b[k] - constants[k]) * modinv(coeffs[k], m[k]), m[k]);
+        for (int i = k+1; i < (int)m.size(); ++i) {
+            (constants[i] += t * coeffs[i]) %= m[i];
+            (coeffs[i] *= m[k]) %= m[i];
+        }
+    }
+    return constants.back();
+}
