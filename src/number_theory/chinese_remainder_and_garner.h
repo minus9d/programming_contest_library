@@ -39,7 +39,6 @@ pair<ll, ll> chineseRemSimple(ll b1, ll m1, ll b2, ll m2) {
 // 中国剰余定理
 // リターン値を (r, m) とすると解は x ≡ r (mod. m)
 // 解なしの場合は (0, -1) をリターン
-// verify: https://atcoder.jp/contests/abc150/tasks/abc150_d
 pair<ll, ll> chineseRem(const vector<ll> &b, const vector<ll> &m) {
     ll r = 0, M = 1;
     for (int i = 0; i < (int)b.size(); ++i) {
