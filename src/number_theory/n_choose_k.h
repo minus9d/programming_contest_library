@@ -83,9 +83,15 @@ public:
     // make nCk table from n1Ck to n2Ck
     vector<ll> makeTableFromN1CkToN2Ck(ll n1, ll n2, ll k) {
         vector<ll> table;
+
+        // n < kのときは nCk = 0
+        FOR(n, n1, k) {
+            table.pb(0);
+        }
+
         ll tmp = -1;
-        FOR(n, n1, n2 + 1) {
-            if (n == n1) {
+        FOR(n, k, n2 + 1) {
+            if (n == k) {
                 tmp = this->choose(n, k);
             }
             else {

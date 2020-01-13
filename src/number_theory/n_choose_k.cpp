@@ -31,8 +31,9 @@ TEST_CASE("modDivision", "[number_theory]") {
 
 TEST_CASE("choose", "[number_theory]") {
     NCK nck(1e9 + 7);
-    REQUIRE(nck.choose(0, 0) == 1);
+    REQUIRE(nck.choose(0, 0) == 1); // https://math.stackexchange.com/questions/2020889/what-is-the-value-of-0-choose-0
     REQUIRE(nck.choose(1, 0) == 1);
+    REQUIRE(nck.choose(0, 1) == 0); // https://math.stackexchange.com/questions/551920/what-is-zero-choose-one
     REQUIRE(nck.choose(1, 1) == 1);
     REQUIRE(nck.choose(7, 2) == 21);
     REQUIRE(nck.choose(1000, 456) == 852866745);
@@ -42,6 +43,7 @@ TEST_CASE("makeNckTableFrom00ToNN", "[number_theory]") {
     NCK nck(1e9 + 7);
     auto table = nck.makeNckTableFrom00ToNN(7);
     REQUIRE(table[0][0] == 1);
+    REQUIRE(table[0][1] == 0);
     REQUIRE(table[1][0] == 1);
     REQUIRE(table[1][1] == 1);
     REQUIRE(table[7][2] == 21);
@@ -56,15 +58,30 @@ TEST_CASE("makeNckTableFromN0ToNN", "[number_theory]") {
     REQUIRE(table[7] == 1);
 }
 
-TEST_CASE("makeTableFromN1CkToN2Ck", "[number_theory]") {
+TEST_CASE("makeTableFromN1CkToN2Ck case-1", "[number_theory]") {
     NCK nck(1e9 + 7);
     auto table = nck.makeTableFromN1CkToN2Ck(2, 7, 2);
+    REQUIRE(SIZE(table) == 6);
     REQUIRE(table[0] == 1);  // 2C2
     REQUIRE(table[1] == 3);  // 3C2
     REQUIRE(table[2] == 6);  // 4C2
     REQUIRE(table[3] == 10);  // 5C2
     REQUIRE(table[4] == 15);  // 6C2
     REQUIRE(table[5] == 21);  // 7C2
+}
+
+TEST_CASE("makeTableFromN1CkToN2Ck case-2", "[number_theory]") {
+    NCK nck(1e9 + 7);
+    auto table = nck.makeTableFromN1CkToN2Ck(0, 7, 2);
+    REQUIRE(SIZE(table) == 8);
+    REQUIRE(table[0] == 0);  // 0C2
+    REQUIRE(table[1] == 0);  // 1C2
+    REQUIRE(table[2] == 1);  // 2C2
+    REQUIRE(table[3] == 3);  // 3C2
+    REQUIRE(table[4] == 6);  // 4C2
+    REQUIRE(table[5] == 10);  // 5C2
+    REQUIRE(table[6] == 15);  // 6C2
+    REQUIRE(table[7] == 21);  // 7C2
 }
 
 TEST_CASE("makeModInverseTable", "[number_theory]") {
