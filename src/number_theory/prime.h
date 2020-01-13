@@ -2,11 +2,11 @@
 #include "common.h"
 
 // 素数判定　遅いが通常これで十分
-bool isPrime(ll n){
+bool isPrime(const ll n){
     if (n <= 1){
         return false;
     }
-    for(int i = 2; i*i <= n; ++i){
+    for(ll i = 2; i*i <= n; ++i){
         if (n % i == 0){
             return false;
         }
@@ -15,7 +15,7 @@ bool isPrime(ll n){
 }
 
 // n以下の素数を得る　遅いかも
-vector<ll> getPrimesSlow(ll n) {
+vector<ll> getPrimesSlow(const ll n) {
     vector<ll> primes;
     primes.clear();
     if (n < 2){
@@ -31,7 +31,7 @@ vector<ll> getPrimesSlow(ll n) {
     }
     for(ll i = 5; i <= n; i += 2){
         bool isPrime = true;
-        for(int p = 0; p < (int)primes.size(); ++p){
+        for(size_t p = 0; p < primes.size(); ++p){
             if (i % primes[p] == 0){
                 isPrime = false;
                 break;
@@ -47,7 +47,7 @@ vector<ll> getPrimesSlow(ll n) {
 // n以下の素数を得る　速い
 // use Sieve of Eratosthenes
 // warning: needs lots of memory
-vector<ll> getPrimesFast(ll n){
+vector<ll> getPrimesFast(const ll n){
     vector<ll> primes;
     if (n < 10000){
         primes.clear();
@@ -64,7 +64,7 @@ vector<ll> getPrimesFast(ll n){
         }
         for(ll i = 5; i <= n; i += 2){
             bool isPrime = true;
-            for(int p = 0; p < (int)primes.size(); ++p){
+            for(size_t p = 0; p < primes.size(); ++p){
                 if (i % primes[p] == 0){
                     isPrime = false;
                     break;
@@ -80,13 +80,13 @@ vector<ll> getPrimesFast(ll n){
         vector<ll> sieve = getPrimesFast(sqrt(n));
 
         vector<short> isPrime(n+1, 1);
-        for(int i = 0; i < (int)sieve.size(); ++i){
-            for(int j = sieve[i] * 2; j <= n; j += sieve[i]){
+        for(size_t i = 0; i < sieve.size(); ++i){
+            for(ll j = sieve[i] * 2; j <= n; j += sieve[i]){
                 isPrime[j] = 0;
             }
         }
 
-        for(int i = 2; i <= n; ++i){
+        for(ll i = 2; i <= n; ++i){
             if (isPrime[i]){
                 primes.push_back(i);
             }
@@ -96,7 +96,7 @@ vector<ll> getPrimesFast(ll n){
 }
 
 // 素数をn個作る
-vector<ll> getFirstNPrimes(int n) {
+vector<ll> getFirstNPrimes(const ll n) {
     vector<ll> primes;
 
     if (n < 1){
@@ -110,10 +110,10 @@ vector<ll> getFirstNPrimes(int n) {
     if (n == 2){
         return primes;
     }
-    int num = 2;
+    ll num = 2;
     for(ll i = 5; num < n; i += 2){
         bool isPrime = true;
-        for(int p = 0; p < (int)primes.size(); ++p){
+        for(size_t p = 0; p < primes.size(); ++p){
             if (i % primes[p] == 0){
                 isPrime = false;
                 break;
@@ -130,7 +130,7 @@ vector<ll> getFirstNPrimes(int n) {
 // nの約数を得る
 // n=12に対して1, 2, 3, 4, 6, 12を返す
 // fast, including 1
-set<ll> getDivisorsSet(ll n){
+set<ll> getDivisorsSet(const ll n){
     set<ll> ret;
     for(ll i = 1; i*i <= n; ++i){
         if (!(n % i)){
@@ -172,7 +172,7 @@ vector<ll> getFactorsVector(ll n){
         n /= 2;
         ret.push_back(2);
     }
-    for(int i = 3; i*i <= n; i += 2){
+    for(ll i = 3; i*i <= n; i += 2){
         while(!(n % i)){
             n /= i;
             ret.push_back(i);
@@ -202,20 +202,20 @@ map<ll, int> getFactorsMap(ll N){
 }
 
 // 2数の最大公約数
-ll getGcdSimple(ll a, ll b)
+ll getGcdSimple(const ll a, const ll b)
 {
     if (b == 0) return a;
     return getGcdSimple(b, a % b);
 }
 
 // 2数の最小公倍数
-ll getLcmSimple(ll a, ll b)
+ll getLcmSimple(const ll a, const ll b)
 {
     return a / getGcdSimple(a, b) * b;
 }
 
 // 数のリストから最大公約数を求める
-ll getGcd(vector<ll> n){
+ll getGcd(const vector<ll>& n){
     auto size = SIZE(n);
     assert(size > 0);
     ll ans = n[0];
@@ -224,11 +224,11 @@ ll getGcd(vector<ll> n){
 }
 
 // 数のリストからleast common multiple(最小公倍数)を求める
-ll getLcm(vector<ll> n){
+ll getLcm(const vector<ll>& n){
     map<ll, int> allFactors;
-    for(int i = 0; i < (int)n.size(); ++i){
+    for(size_t i = 0; i < n.size(); ++i){
         map<ll, int> factors = getFactorsMap(n[i]);
-        for(map<ll, int>::iterator it = factors.begin();
+        for(auto it = factors.begin();
             it != factors.end();
             ++it){
             if (allFactors[ it->first ] < it->second){
@@ -248,7 +248,7 @@ ll getLcm(vector<ll> n){
 }
 
 // 約数の数を得る  e.g. 12 -> 6 (1, 2, 3, 4, 6, 12の6個)
-ll getDivisorsNum(ll n){
+ll getDivisorsNum(const ll n){
     map<ll, int> factors = getFactorsMap(n);
     ll ret = 1;
     for(auto kv: factors) {
@@ -258,7 +258,7 @@ ll getDivisorsNum(ll n){
 }
 
 // 約数のリストを得る　遅いかも
-vector<ll> getAllDivisors(ll n){
+vector<ll> getAllDivisors(const ll n){
     vector<ll> ret;
     for(ll i = 1; i*i <= n; ++i){
         if (n % i == 0){
