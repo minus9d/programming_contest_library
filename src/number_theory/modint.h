@@ -59,3 +59,5 @@ template<int MOD> struct Fp {
         return t;
     }
 };
+
+// using mint = Fp<1e9 + 7>

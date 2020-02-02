@@ -33,7 +33,7 @@ ll getNumberOfSegmentsWhoseSumIsNotNegative(const vector<T>& arr) {
     auto mx = *max_element(ALL(cum));
 
     ll ans = 0;
-    Bit bit; bit.init(mx);
+    BitSimple bit; bit.init(mx);
     bit.add(offset, 1);
     FOR(i, 1, N + 1) {
         auto c = cum[i];
@@ -51,7 +51,7 @@ template <typename T>
 ll bubbleSortSwapNum(const vector<T>& arr) {
     ll ans = 0;
     ll N = SIZE(arr);
-    Bit bit; bit.init(N);
+    BitSimple bit; bit.init(N);
     REP(j, N) {
         ans += j - bit.sum(arr[j]);
         bit.add(arr[j], 1);
