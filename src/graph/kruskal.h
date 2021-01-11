@@ -25,7 +25,7 @@ static tuple<ll, vector<int>> kruskal(vector<edge>& edges, int V)
     sort(ALL(idx_edges), [](const intedge& a, const intedge& b) {
                              return a.second.cost < b.second.cost;
                          });
-    UnionFind uf; uf.init(V);
+    UnionFind uf(V);
     ll res = 0;
     vector<int> used_edge_indexes(E);
     REP(i, E) {
