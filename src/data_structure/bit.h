@@ -78,3 +78,29 @@ private:
         return res;
     }
 };
+
+// 区間加算にも対応した BIT (0-based)
+// 0-basedにするだけのラッパークラス
+template <class Abel> struct BIT0Based {
+    BIT0Based(int n) : bit(n) {};
+    void init(int n) {
+        bit.init(n);
+    }
+    
+    // 区間[a, b)に値xを加算
+    inline void add(int a, int b, Abel x) {
+        bit.add(a + 1, b + 1, x);
+    }
+
+    // 区間[a, b)の和を返す
+    inline Abel sum(int a, int b) {
+        return bit.sum(a + 1, b + 1);
+    }
+
+    /* debug */
+    void print() {
+        bit.print();
+    }
+private:
+    BIT<Abel> bit;
+};
