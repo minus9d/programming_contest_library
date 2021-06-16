@@ -20,6 +20,7 @@ TEST_CASE("bit", "[data_structure]") {
 }
 
 // drken氏のBIT (区間加算対応版)
+// 区間加算を使わない操作のテスト
 TEST_CASE("bit_drken_1", "[data_structure]") {
     const int N = 8;
     BIT<ll> bit(N);
@@ -41,6 +42,7 @@ TEST_CASE("bit_drken_1", "[data_structure]") {
 }
 
 // drken氏のBIT (区間加算対応版)
+// 区間加算を使う操作のテスト
 TEST_CASE("bit_drken_2", "[data_structure]") {
     const int N = 8;
     BIT<ll> bit(N);
@@ -66,7 +68,7 @@ TEST_CASE("bit_drken_2", "[data_structure]") {
 
     // 1番目
     REQUIRE(bit.sum(1, 2) == 2);
-    // 1番目~2番目の和
+    // 1番目~i番目の和
     REQUIRE(bit.sum(1, 3) == 4);
     REQUIRE(bit.sum(1, 4) == 11);
     REQUIRE(bit.sum(1, 5) == 18);
@@ -74,4 +76,41 @@ TEST_CASE("bit_drken_2", "[data_structure]") {
     REQUIRE(bit.sum(1, 7) == 27);
     REQUIRE(bit.sum(1, 8) == 31);
     REQUIRE(bit.sum(1, 9) == 30);
+}
+
+// drken氏のBIT (区間加算対応版; さらに0-basedに)
+// 区間加算を使う操作のテスト
+TEST_CASE("bit_drken_3", "[data_structure]") {
+    const int N = 8;
+    BIT0Based<ll> bit(N);
+
+    // 0番目~3番目に +2
+    // 2番目~6番目に +5
+    // 5番目~7番目に -1
+    // 結果、2 2 7 7 5 4 4 -1 となるはず
+    bit.add(0, 4, +2);
+    bit.add(2, 7, +5);
+    bit.add(5, 8, -1);
+
+    // 0番目
+    REQUIRE(bit.sum(0, 1) == 2);
+    // 1番目
+    REQUIRE(bit.sum(1, 2) == 2);
+    REQUIRE(bit.sum(2, 3) == 7);
+    REQUIRE(bit.sum(3, 4) == 7);
+    REQUIRE(bit.sum(4, 5) == 5);
+    REQUIRE(bit.sum(5, 6) == 4);
+    REQUIRE(bit.sum(6, 7) == 4);
+    REQUIRE(bit.sum(7, 8) == -1);
+
+    // 0番目
+    REQUIRE(bit.sum(0, 1) == 2);
+    // 0番目~i番目の和
+    REQUIRE(bit.sum(0, 2) == 4);
+    REQUIRE(bit.sum(0, 3) == 11);
+    REQUIRE(bit.sum(0, 4) == 18);
+    REQUIRE(bit.sum(0, 5) == 23);
+    REQUIRE(bit.sum(0, 6) == 27);
+    REQUIRE(bit.sum(0, 7) == 31);
+    REQUIRE(bit.sum(0, 8) == 30);
 }
