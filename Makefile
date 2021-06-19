@@ -15,9 +15,9 @@ DEPEXT      := d
 OBJEXT      := o
 
 #Flags, Libraries and Includes
-CXXFLAGS    := -O2 -W -Wall -g -std=c++14
+CXXFLAGS    := -O2 -W -Wall -g -std=c++17
 LDFLAGS     :=
-INC         := -Isrc
+INC         := -Isrc -I3rdparty/ac-library
 
 #---------------------------------------------------------------------------------
 #DO NOT EDIT BELOW THIS LINE
