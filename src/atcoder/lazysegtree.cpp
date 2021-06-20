@@ -116,3 +116,55 @@ TEST_CASE("lazysegtree2", "[atcoder]")
     REQUIRE(tmp.value == 320);
     REQUIRE(tmp.size == 3);
 }
+
+// 「区間中の値を全てある値 x に更新する」という区間更新操作と、区間和取得の機能を持たせる
+// cf. https://betrue12.hateblo.jp/entry/2020/09/22/194541
+// 各要素の型
+struct S3
+{
+    int value; // 実際の値
+    int size;  // 区間の幅
+};
+using F3 = int;
+// 擬似的に恒等写像として扱う値
+const F3 ID = int(2e9); 
+S3 op3(S3 a, S3 b) { return {a.value + b.value, a.size + b.size}; }
+S3 e3() { return {0, 0}; }
+// 操作f（e.g. 区間内の全要素に整数fを加算）を、
+// 各ノードのdataの値 x に対して作用させる関数
+// f が ID ならばそのまま x を返す。
+// そうでなければ区間内の値全てを f に変更するので、x.value = x.size * f とする。
+S3 mapping3(F3 f, S3 x) {
+    if (f != ID)
+        x.value = x.size * f;
+    return x;
+}
+// 既にこれまでの操作を溜めている lazy に対して、さらに新しい操作を追加する関数
+// gがこれまでの操作、fが後に追加する操作
+// 可換でない場合は順番に注意
+// fがIDならそのままgを返す。そうでなければfを返す
+F3 composition3(F3 f, F3 g) { return (f == ID ? g : f); }
+// 区間操作演算 mapping における恒等写像を返す関数。基本、定数を返す
+// 全ての a に対してmapping(id, a) = a となるもの
+// 区間加算操作の場合は、足しても絶対に対象の値を変えないような値、
+// つまり0
+F3 id3() { return 0; }
+TEST_CASE("lazysegtree3", "[atcoder]")
+{
+    int n = 5;
+    // {0, 0, 0, 0, 0}
+    std::vector<S2> v(n, {0, 1});
+    atcoder::lazy_segtree<S2, op2, e2, F2, mapping2, composition2, id2> seg(v);
+
+    // data[1, 2, 3]に操作(10で上書き)
+    // v = {0, 10, 10, 10, 0}
+    seg.apply(1, 4, 10);
+    // data[3, 4, 5]に操作(20で上書き)
+    // v = {0, 10, 20, 20, 20}
+    seg.apply(3, 5, 20);
+
+    // 値が変わったことを確認
+    S2 tmp = seg.prod(1, 4);
+    REQUIRE(tmp.value == 50);
+    REQUIRE(tmp.size == 3);
+}
